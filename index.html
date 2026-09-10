@@ -163,7 +163,7 @@
         </div>
     </div>
 
-    <!-- Header (ย้ายปุ่มเสียงมาไว้บนนี้ เรียบร้อย สวยงาม ไม่ทับเมนู) -->
+    <!-- Header -->
     <header class="glass-header sticky top-0 z-40">
         <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -176,7 +176,7 @@
                 </div>
             </div>
             
-            <!-- ปุ่มเปิด/ปิดเสียง อยู่มุมขวาบนของหัวเว็บ -->
+            <!-- ปุ่มเปิด/ปิดเสียง -->
             <button id="music-toggle" onclick="toggleMusic()" class="w-9 h-9 bg-white border border-red-200 rounded-full flex items-center justify-center text-red-800 shadow-sm transition-all hover:bg-red-50 hidden hover:scale-105">
                 <i class="fas fa-music text-sm"></i>
             </button>
@@ -258,7 +258,7 @@
                             <span class="text-[10px] text-red-300 block mb-1">บทบรรยายทั่วไป</span>
                             <h2 class="text-xl font-bold text-white title-font" id="local-gen-balance">0</h2>
                         </div>
-                        <div class="text-red-400/50 text-xl"></div>
+                        <div class="text-red-400/50 text-xl">+</div>
                         <div class="flex-1 bg-black/20 p-3 rounded-xl border border-red-700/50">
                             <span class="text-[10px] text-red-300 block mb-1">โบนัสพิเศษ</span>
                             <h2 class="text-xl font-bold text-white title-font" id="local-bonus-balance">0</h2>
@@ -280,6 +280,21 @@
 
         <!-- SECTION 3: LEADERBOARD -->
         <section id="sec-leaderboard" class="hidden-section pb-24 relative min-h-[60vh]">
+            
+            <!-- ปรับแก้ Loader ให้กลืนกับพื้นหลัง ไร้ขอบ และครอบคลุมพอดี -->
+            <div id="leaderboard-loader" class="absolute -inset-4 z-50 flex-col items-center pt-24 bg-[#FAFAFA]/95 backdrop-blur-md hidden opacity-0 transition-opacity duration-500">
+                <div class="absolute w-40 h-40 bg-red-600 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+                
+                <div class="relative w-28 h-28 flex items-center justify-center mb-6">
+                    <div class="absolute inset-0 rounded-full border-y-4 border-x-4 border-x-transparent border-y-red-800 animate-spin" style="animation-duration: 3s;"></div>
+                    <div class="absolute inset-2 rounded-full border-x-4 border-y-4 border-y-transparent border-x-red-500 animate-[spin_2s_linear_infinite_reverse]"></div>
+                    <i class="fas fa-fan text-5xl text-red-900 animate-[spin_4s_linear_infinite]"></i>
+                </div>
+                
+                <h3 class="title-font text-3xl text-red-900 font-bold tracking-widest drop-shadow-md animate-bounce" style="animation-duration: 2s;">เปิดม้วนคัมภีร์...</h3>
+                <p class="text-sm text-red-600 tracking-widest mt-1 opacity-80 animate-pulse"><i class="fas fa-om text-xs mr-1"></i> กำลังรวบรวมลมปราณจัดอันดับ <i class="fas fa-om text-xs ml-1"></i></p>
+            </div>
+
             <div class="relative bg-white rounded-3xl p-6 text-gray-800 mb-4 shadow-md overflow-hidden mt-2 mx-1 border border-red-100">
                 <div class="relative z-10 flex justify-between items-center">
                     <div>
@@ -401,7 +416,7 @@
             activeBtn.classList.remove('text-gray-400');
 
             if (tabName === 'history') loadHistory();
-            if (tabName === 'leaderboard') loadLeaderboard();
+            if (tabName === 'leaderboard') loadLeaderboard(); 
         }
 
         document.getElementById('scoreForm').addEventListener('submit', function(e) {
@@ -559,22 +574,41 @@
 
         function loadLeaderboard() {
             const list = document.getElementById('leaderboard-list');
+            const loader = document.getElementById('leaderboard-loader');
             
-            list.innerHTML = `
-                <div class="flex flex-col items-center justify-center py-10 text-red-800 opacity-60">
-                    <i class="fas fa-compass fa-spin text-3xl mb-3"></i>
-                    <span class="text-sm">กำลังรวบรวมข้อมูลจากจวนต่างๆ...</span>
-                </div>`;
+            list.innerHTML = "";
+            loader.style.display = 'flex';
             
-            fetch(SCRIPT_URL)
-                .then(response => response.json())
-                .then(data => {
+            setTimeout(() => {
+                loader.classList.remove('opacity-0');
+                loader.classList.add('opacity-100');
+            }, 10);
+            
+            const fetchData = fetch(SCRIPT_URL).then(response => response.json());
+            const minLoadTime = new Promise(resolve => setTimeout(resolve, 2000));
+            
+            Promise.all([fetchData, minLoadTime])
+                .then(([data]) => {
                     mockLeaderboardData = data; 
-                    renderLeaderboardList(); 
+                    
+                    loader.classList.remove('opacity-100');
+                    loader.classList.add('opacity-0');
+                    
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        renderLeaderboardList(); 
+                    }, 500);
                 })
                 .catch(error => {
                     console.error("Error fetching leaderboard:", error);
-                    list.innerHTML = `<div class="text-center text-red-600 py-10">⚠️ ไม่สามารถเชื่อมต่อคลังข้อมูลได้</div>`;
+                    
+                    loader.classList.remove('opacity-100');
+                    loader.classList.add('opacity-0');
+                    
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        list.innerHTML = `<div class="text-center text-red-600 py-10">⚠️ จวนเกิดความวุ่นวาย ไม่สามารถเชื่อมต่อคลังข้อมูลได้</div>`;
+                    }, 500);
                 });
         }
 
@@ -583,7 +617,7 @@
             list.innerHTML = "";
 
             if (mockLeaderboardData.length === 0) {
-                list.innerHTML = `<div class="text-center text-gray-500 py-10">ยังไม่มีข้อมูลอันดับ</div>`;
+                list.innerHTML = `<div class="text-center text-gray-500 py-10">ยังไม่มีข้อมูลอันดับในยุทธภพ</div>`;
                 return;
             }
 
@@ -600,10 +634,11 @@
                 let rankIcon = `<span class="text-gray-500 font-bold text-lg">${index+1}</span>`;
                 let containerClass = "animate-fade-in"; 
                 
+                // แก้ไขไม่ให้กรอบอันดับ 1 ขยายจนทะลุเฟรม (ถอด scale-105 ออก และใช้ขอบเรืองแสงแทน)
                 if(index === 0) {
-                    rankStyle = "bg-red-50 border-red-200 shadow-md";
-                    rankIcon = `<div class="w-10 h-10 rounded-full bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-white text-xl shadow-lg"><i class="fas fa-crown"></i></div>`;
-                    containerClass += " transform scale-105 my-4 z-10";
+                    rankStyle = "bg-red-50 border-red-300 shadow-md";
+                    rankIcon = `<div class="w-10 h-10 rounded-full bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-white text-xl shadow-lg ring-2 ring-red-200"><i class="fas fa-crown"></i></div>`;
+                    containerClass += " my-3 z-10 border-2 border-red-300 shadow-[0_4px_20px_rgba(153,27,27,0.15)]";
                 } 
                 else if(index === 1) rankIcon = `<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-bold border border-gray-300">2</div>`;
                 else if(index === 2) rankIcon = `<div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-800 font-bold border border-orange-200">3</div>`;
