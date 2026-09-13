@@ -281,7 +281,7 @@
         <!-- SECTION 3: LEADERBOARD -->
         <section id="sec-leaderboard" class="hidden-section pb-24 relative min-h-[60vh]">
             
-            <!-- ปรับแก้ Loader ให้กลืนกับพื้นหลัง ไร้ขอบ และครอบคลุมพอดี -->
+            <!-- Loader กลืนกับพื้นหลัง -->
             <div id="leaderboard-loader" class="absolute -inset-4 z-50 flex-col items-center pt-24 bg-[#FAFAFA]/95 backdrop-blur-md hidden opacity-0 transition-opacity duration-500">
                 <div class="absolute w-40 h-40 bg-red-600 rounded-full blur-3xl opacity-20 animate-pulse"></div>
                 
@@ -292,7 +292,7 @@
                 </div>
                 
                 <h3 class="title-font text-3xl text-red-900 font-bold tracking-widest drop-shadow-md animate-bounce" style="animation-duration: 2s;">เปิดม้วนคัมภีร์...</h3>
-                <p class="text-sm text-red-600 tracking-widest mt-1 opacity-80 animate-pulse"><i class="fas fa-om text-xs mr-1"></i> กำลังรวบรวมรายชื่อจัดอันดับ <i class="fas fa-om text-xs ml-1"></i></p>
+                <p class="text-sm text-red-600 tracking-widest mt-1 opacity-80 animate-pulse"><i class="fas fa-om text-xs mr-1"></i> กำลังรวบรวมลมปราณจัดอันดับ <i class="fas fa-om text-xs ml-1"></i></p>
             </div>
 
             <div class="relative bg-white rounded-3xl p-6 text-gray-800 mb-4 shadow-md overflow-hidden mt-2 mx-1 border border-red-100">
@@ -318,7 +318,7 @@
     </main>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbztsh3JjRTwxzgh5yuGNEPqYO8uIrsVJiuOo38vV2IBpZxGcIBMyqsWAMAG7dkrsh41/exec"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwhpNUBcJ357QQZc7mvxcUHdRj9aaXrIvVenFsVOipdBiuYMR49oYZlZdXEHSukdcb/exec"; 
         
         let currentSortMode = 'general';
         let mockLeaderboardData = []; 
@@ -634,7 +634,6 @@
                 let rankIcon = `<span class="text-gray-500 font-bold text-lg">${index+1}</span>`;
                 let containerClass = "animate-fade-in"; 
                 
-                // แก้ไขไม่ให้กรอบอันดับ 1 ขยายจนทะลุเฟรม (ถอด scale-105 ออก และใช้ขอบเรืองแสงแทน)
                 if(index === 0) {
                     rankStyle = "bg-red-50 border-red-300 shadow-md";
                     rankIcon = `<div class="w-10 h-10 rounded-full bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-white text-xl shadow-lg ring-2 ring-red-200"><i class="fas fa-crown"></i></div>`;
