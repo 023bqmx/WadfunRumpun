@@ -292,7 +292,7 @@
                 </div>
                 
                 <h3 class="title-font text-3xl text-red-900 font-bold tracking-widest drop-shadow-md animate-bounce" style="animation-duration: 2s;">เปิดม้วนคัมภีร์...</h3>
-                <p class="text-sm text-red-600 tracking-widest mt-1 opacity-80 animate-pulse"><i class="fas fa-om text-xs mr-1"></i> กำลังรวบรวมลมปราณจัดอันดับ <i class="fas fa-om text-xs ml-1"></i></p>
+                <p class="text-sm text-red-600 tracking-widest mt-1 opacity-80 animate-pulse"><i class="fas fa-om text-xs mr-1"></i> กำลังรวบรวมคะแนนจัดอันดับ <i class="fas fa-om text-xs ml-1"></i></p>
             </div>
 
             <div class="relative bg-white rounded-3xl p-6 text-gray-800 mb-4 shadow-md overflow-hidden mt-2 mx-1 border border-red-100">
@@ -634,13 +634,35 @@
                 let rankIcon = `<span class="text-gray-500 font-bold text-lg">${index+1}</span>`;
                 let containerClass = "animate-fade-in"; 
                 
-                if(index === 0) {
+                // กำหนดสีและสไตล์เฉพาะสำหรับอันดับ 1 ถึง 5 ตามที่คุณต้องการ
+                if(index === 0) { // อันดับ 1: สีแดง
                     rankStyle = "bg-red-50 border-red-300 shadow-md";
                     rankIcon = `<div class="w-10 h-10 rounded-full bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-white text-xl shadow-lg ring-2 ring-red-200"><i class="fas fa-crown"></i></div>`;
                     containerClass += " my-3 z-10 border-2 border-red-300 shadow-[0_4px_20px_rgba(153,27,27,0.15)]";
                 } 
-                else if(index === 1) rankIcon = `<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-bold border border-gray-300">2</div>`;
-                else if(index === 2) rankIcon = `<div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-800 font-bold border border-orange-200">3</div>`;
+                else if(index === 1) { // อันดับ 2: สีเหลือง
+                    rankStyle = "bg-amber-50 border-amber-300 shadow-sm";
+                    rankIcon = `<div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-800 font-bold border border-amber-200 shadow-sm">2</div>`;
+                    containerClass += " my-2 border-2 border-amber-200";
+                }
+                else if(index === 2) { // อันดับ 3: สีม่วง
+                    rankStyle = "bg-purple-50 border-purple-300 shadow-sm";
+                    rankIcon = `<div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-800 font-bold border border-purple-200 shadow-sm">3</div>`;
+                    containerClass += " my-2 border-2 border-purple-200";
+                }
+                else if(index === 3) { // อันดับ 4: สีน้ำเงิน
+                    rankStyle = "bg-blue-50 border-blue-300 shadow-sm";
+                    rankIcon = `<div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-bold border border-blue-200 shadow-sm">4</div>`;
+                    containerClass += " my-2 border-2 border-blue-200";
+                }
+                else if(index === 4) { // อันดับ 5: สีเขียว
+                    rankStyle = "bg-emerald-50 border-emerald-300 shadow-sm";
+                    rankIcon = `<div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-800 font-bold border border-emerald-200 shadow-sm">5</div>`;
+                    containerClass += " my-2 border-2 border-emerald-200";
+                }
+                else {
+                    rankIcon = `<div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 font-bold border border-gray-200">${index+1}</div>`;
+                }
 
                 const card = document.createElement('div');
                 card.className = `relative flex items-center p-3 sm:p-4 rounded-2xl border ${rankStyle} ${containerClass}`;
