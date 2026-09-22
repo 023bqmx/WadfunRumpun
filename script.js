@@ -26,7 +26,7 @@ splash.addEventListener('click', () => {
         splash.style.display = 'none';
         
         // สุ่ม 30% เพื่อเข้า Minigame (ตอนทดสอบแก้เป็น < 1 ได้ครับ)
-        if (Math.random() < 1) {
+        if (Math.random() < 0) {
             if(typeof prepareMiniGame === 'function') {
                 
                 // --- ปิดเพลงอัตโนมัติเมื่อเข้ามินิเกม ---
