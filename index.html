@@ -91,7 +91,6 @@
     </header>
 
     <main class="max-w-md mx-auto p-4 relative z-0">
-        
         <!-- SECTION 1: FORM -->
         <section id="sec-form" class="space-y-5 animate-fade-in">
             <div class="card-rp p-6 relative overflow-hidden">
@@ -110,9 +109,7 @@
                             <i class="fas fa-user absolute left-3 top-3.5 text-gray-400 group-focus-within:text-red-700 transition-colors"></i>
                             <input type="text" id="charName" required class="custom-input w-full p-3 pl-10 rounded-xl" placeholder="ระบุชื่อตัวละคร">
                         </div>
-                        <!-- จุดแสดงปุ่มตัวละครที่เคยใช้ (ออโต้ฟิล) -->
                         <div id="recent-chars-container" class="flex gap-2 overflow-x-auto no-scrollbar mt-2 hidden">
-                            <!-- ปุ่มสร้างจาก JS -->
                         </div>
                     </div>
 
@@ -176,27 +173,19 @@
                 <button onclick="clearAllHistory()" class="text-xs text-red-600 hover:text-red-800 underline bg-white px-2 py-1 rounded border border-red-100 shadow-sm">ล้างประวัติ</button>
             </div>
 
-            <!-- ตัวกรองแยกตามตัวละคร -->
-            <div id="char-filter-container" class="flex gap-2 overflow-x-auto no-scrollbar pb-2 hidden">
-                <!-- ปุ่มสร้างจาก JS -->
-            </div>
-
+            <div id="char-filter-container" class="flex gap-2 overflow-x-auto no-scrollbar pb-2 hidden"></div>
             <div id="history-list" class="space-y-3 pb-20"></div>
         </section>
 
         <!-- SECTION 3: LEADERBOARD -->
         <section id="sec-leaderboard" class="hidden-section pb-24 relative min-h-[60vh]">
-            
-            <!-- Loader -->
             <div id="leaderboard-loader" class="absolute -inset-4 z-50 flex-col items-center pt-24 bg-[#FAFAFA]/95 backdrop-blur-md hidden opacity-0 transition-opacity duration-500">
                 <div class="absolute w-40 h-40 bg-red-600 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-                
                 <div class="relative w-28 h-28 flex items-center justify-center mb-6">
                     <div class="absolute inset-0 rounded-full border-y-4 border-x-4 border-x-transparent border-y-red-800 animate-spin" style="animation-duration: 3s;"></div>
                     <div class="absolute inset-2 rounded-full border-x-4 border-y-4 border-y-transparent border-x-red-500 animate-[spin_2s_linear_infinite_reverse]"></div>
                     <i class="fas fa-fan text-5xl text-red-900 animate-[spin_4s_linear_infinite]"></i>
                 </div>
-                
                 <h3 class="title-font text-3xl text-red-900 font-bold tracking-widest drop-shadow-md animate-bounce" style="animation-duration: 2s;">เปิดม้วนคัมภีร์...</h3>
                 <p class="text-sm text-red-600 tracking-widest mt-1 opacity-80 animate-pulse"><i class="fas fa-om text-xs mr-1"></i> กำลังรวบรวมลมปราณจัดอันดับ <i class="fas fa-om text-xs ml-1"></i></p>
             </div>
@@ -209,21 +198,67 @@
                     </div>
                     <i class="fas fa-award text-4xl text-red-200 drop-shadow-sm"></i>
                 </div>
-                
                 <div class="flex gap-2 mt-4 bg-gray-100 p-1 rounded-xl">
                     <button id="btn-sort-gen" onclick="setSortMode('general')" class="flex-1 py-2 text-sm font-bold rounded-lg transition-all bg-white text-red-800 shadow-sm border border-gray-200">ทั่วไป</button>
                     <button id="btn-sort-bonus" onclick="setSortMode('bonus')" class="flex-1 py-2 text-sm font-bold rounded-lg transition-all text-gray-500 hover:text-gray-700">โบนัสพิเศษ</button>
                 </div>
             </div>
             
-            <div class="px-1">
-                <div id="leaderboard-list" class="space-y-3"></div>
-            </div>
+            <div class="px-1"><div id="leaderboard-list" class="space-y-3"></div></div>
         </section>
-
     </main>
 
-    <!-- ดึงไฟล์ script.js ที่แยกไว้ -->
+    <!-- ================= MINIGAME SECTION ================= -->
+    <div id="minigame-overlay" class="fixed inset-0 z-[9999] hidden bg-blue-400 flex-col items-center justify-center">
+        <!-- Canvas เกม -->
+        <canvas id="gameCanvas" class="w-full h-full object-cover"></canvas>
+        
+        <!-- ปุ่มควบคุมสำหรับมือถือ -->
+        <div class="fixed bottom-10 left-0 w-full px-6 flex justify-between items-end pointer-events-none z-50">
+            <div class="flex gap-4 pointer-events-auto">
+                <button id="btn-left" class="w-16 h-16 bg-white/50 backdrop-blur-md rounded-full border-2 border-white/70 shadow-lg text-white text-2xl active:bg-white/80 active:scale-95 transition-transform"><i class="fas fa-arrow-left"></i></button>
+                <button id="btn-right" class="w-16 h-16 bg-white/50 backdrop-blur-md rounded-full border-2 border-white/70 shadow-lg text-white text-2xl active:bg-white/80 active:scale-95 transition-transform"><i class="fas fa-arrow-right"></i></button>
+            </div>
+            <div class="pointer-events-auto">
+                <button id="btn-jump" class="w-20 h-20 bg-red-500/70 backdrop-blur-md rounded-full border-2 border-white/70 shadow-lg text-white text-2xl active:bg-red-500/90 active:scale-95 transition-transform"><i class="fas fa-arrow-up"></i></button>
+            </div>
+        </div>
+
+        <!-- 1) Modal เลือกตัวละครก่อนเข้าเกม -->
+        <div id="minigame-char-modal" class="absolute inset-0 bg-black/60 backdrop-blur-sm hidden flex-col items-center justify-center p-4 z-[101] opacity-0 transition-opacity duration-300">
+            <div class="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl border-4 border-blue-400 transform scale-90 transition-transform duration-300 text-center" id="minigame-char-box">
+                <i class="fas fa-gamepad text-5xl text-blue-500 mb-4 animate-bounce"></i>
+                <h3 class="text-xl font-bold text-gray-800 title-font mb-1">มินิเกมลับ!</h3>
+                <p class="text-sm text-gray-500 mb-4">เลือกตัวละครที่จะรับคะแนนหากชนะ</p>
+                
+                <div id="minigame-char-list" class="flex flex-col gap-2 max-h-48 overflow-y-auto no-scrollbar mb-4">
+                    <!-- สร้างปุ่มรายชื่อตัวละครจาก JS -->
+                </div>
+                
+                <button onclick="skipMiniGame()" class="text-sm text-gray-400 hover:text-gray-600 underline">ข้ามการเล่นเกม</button>
+            </div>
+        </div>
+
+        <!-- 2) Modal คำถาม Lucky Block -->
+        <div id="question-modal" class="absolute inset-0 bg-black/60 backdrop-blur-sm hidden flex-col items-center justify-center p-4 z-[100] opacity-0 transition-opacity duration-300">
+            <div class="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl border-4 border-yellow-400 transform scale-90 transition-transform duration-300" id="question-box">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-yellow-400 rounded-xl mx-auto flex items-center justify-center text-3xl mb-4 shadow-inner border-b-4 border-yellow-600">
+                        <i class="fas fa-question text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800" id="question-text">คำถาม?</h3>
+                    <p class="text-sm text-gray-500 mt-1">ตอบถูกรับ 100 คะแนนทั่วไป!</p>
+                </div>
+                <div class="space-y-3" id="choice-container">
+                    <!-- สร้างช้อยส์จาก JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ================= END MINIGAME ================= -->
+
+    <!-- ดึงไฟล์ Script -->
+    <script src="minigame.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

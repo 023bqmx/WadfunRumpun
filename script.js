@@ -1,4 +1,4 @@
-// อัปเดตเป็นลิงก์ล่าสุดของคุณ
+// อัปเดตลิงก์ล่าสุดของคุณ
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuDHBtDE18IMgJaaXCPWbNz88IpSCfaQGjjfiDZKSRSglBNuYYPwfawG9Q0vxHPHb7/exec"; 
 
 let currentSortMode = 'general';
@@ -9,7 +9,7 @@ const splash = document.getElementById('splash-screen');
 const bgMusic = document.getElementById('bg-music');
 const musicToggleBtn = document.getElementById('music-toggle');
 
-// เปิดหน้าจอ
+// เปิดหน้าจอ (เริ่มเล่นเพลง)
 splash.addEventListener('click', () => {
     splash.style.animation = 'fadeOut 0.8s forwards';
     bgMusic.volume = 0.5; 
@@ -24,15 +24,34 @@ splash.addEventListener('click', () => {
 
     setTimeout(() => {
         splash.style.display = 'none';
-        checkNoticePopup(); 
+        
+        // สุ่ม 30% เพื่อเข้า Minigame (ตอนทดสอบแก้เป็น < 1 ได้ครับ)
+        if (Math.random() < 1) {
+            if(typeof prepareMiniGame === 'function') {
+                
+                // --- ปิดเพลงอัตโนมัติเมื่อเข้ามินิเกม ---
+                bgMusic.pause();
+                const icon = musicToggleBtn.querySelector('i');
+                icon.className = 'fas fa-volume-mute';
+                musicToggleBtn.classList.add('opacity-50', 'bg-gray-100');
+                
+                // เรียกหน้าต่างเลือกตัวละครก่อน
+                prepareMiniGame(); 
+                
+            } else {
+                checkNoticePopup();
+            }
+        } else {
+            checkNoticePopup(); 
+        }
     }, 800);
 });
 
+// ฟังก์ชันเปิด/ปิดเสียงเพลง (ที่รอบก่อนผมลืมใส่ให้ครับ)
 function toggleMusic() {
     const icon = musicToggleBtn.querySelector('i');
     if (bgMusic.paused) {
-        if (bgMusic.currentTime >= bgMusic.duration) bgMusic.currentTime = 0;
-        bgMusic.play();
+        bgMusic.play().catch(e => console.log("Audio error:", e));
         icon.className = 'fas fa-music';
         musicToggleBtn.classList.remove('opacity-50', 'bg-gray-100');
     } else {
@@ -362,7 +381,6 @@ function loadLeaderboard() {
         loader.classList.add('opacity-100');
     }, 10);
     
-    // 🔥 เพิ่มส่วนป้องกันการ Cache ข้อมูลเก่า (Cache-busting)
     const fetchUrl = SCRIPT_URL + "?t=" + new Date().getTime();
     
     const fetchData = fetch(fetchUrl).then(response => response.json());
