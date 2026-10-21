@@ -1,4 +1,4 @@
-// อัปเดตลิงก์ล่าสุดของคุณ
+// ลิงก์ Google Apps Script ของคุณ
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuDHBtDE18IMgJaaXCPWbNz88IpSCfaQGjjfiDZKSRSglBNuYYPwfawG9Q0vxHPHb7/exec"; 
 
 let currentSortMode = 'general';
@@ -24,33 +24,17 @@ splash.addEventListener('click', () => {
 
     setTimeout(() => {
         splash.style.display = 'none';
-        
-        // สุ่ม 30% เพื่อเข้า Minigame (ตอนทดสอบแก้เป็น < 1 ได้ครับ)
-        if (Math.random() < 0) {
-            if(typeof prepareMiniGame === 'function') {
-                
-                // --- ปิดเพลงอัตโนมัติเมื่อเข้ามินิเกม ---
-                bgMusic.pause();
-                const icon = musicToggleBtn.querySelector('i');
-                icon.className = 'fas fa-volume-mute';
-                musicToggleBtn.classList.add('opacity-50', 'bg-gray-100');
-                
-                // เรียกหน้าต่างเลือกตัวละครก่อน
-                prepareMiniGame(); 
-                
-            } else {
-                checkNoticePopup();
-            }
-        } else {
-            checkNoticePopup(); 
-        }
+        checkNoticePopup(); 
     }, 800);
 });
 
-// ฟังก์ชันเปิด/ปิดเสียงเพลง (ที่รอบก่อนผมลืมใส่ให้ครับ)
+// ฟังก์ชันเปิด/ปิดเสียงเพลง
 function toggleMusic() {
     const icon = musicToggleBtn.querySelector('i');
     if (bgMusic.paused) {
+        if (bgMusic.currentTime >= bgMusic.duration) {
+            bgMusic.currentTime = 0;
+        }
         bgMusic.play().catch(e => console.log("Audio error:", e));
         icon.className = 'fas fa-music';
         musicToggleBtn.classList.remove('opacity-50', 'bg-gray-100');

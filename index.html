@@ -208,57 +208,7 @@
         </section>
     </main>
 
-    <!-- ================= MINIGAME SECTION ================= -->
-    <div id="minigame-overlay" class="fixed inset-0 z-[9999] hidden bg-blue-400 flex-col items-center justify-center">
-        <!-- Canvas เกม -->
-        <canvas id="gameCanvas" class="w-full h-full object-cover"></canvas>
-        
-        <!-- ปุ่มควบคุมสำหรับมือถือ -->
-        <div class="fixed bottom-10 left-0 w-full px-6 flex justify-between items-end pointer-events-none z-50">
-            <div class="flex gap-4 pointer-events-auto">
-                <button id="btn-left" class="w-16 h-16 bg-white/50 backdrop-blur-md rounded-full border-2 border-white/70 shadow-lg text-white text-2xl active:bg-white/80 active:scale-95 transition-transform"><i class="fas fa-arrow-left"></i></button>
-                <button id="btn-right" class="w-16 h-16 bg-white/50 backdrop-blur-md rounded-full border-2 border-white/70 shadow-lg text-white text-2xl active:bg-white/80 active:scale-95 transition-transform"><i class="fas fa-arrow-right"></i></button>
-            </div>
-            <div class="pointer-events-auto">
-                <button id="btn-jump" class="w-20 h-20 bg-red-500/70 backdrop-blur-md rounded-full border-2 border-white/70 shadow-lg text-white text-2xl active:bg-red-500/90 active:scale-95 transition-transform"><i class="fas fa-arrow-up"></i></button>
-            </div>
-        </div>
-
-        <!-- 1) Modal เลือกตัวละครก่อนเข้าเกม -->
-        <div id="minigame-char-modal" class="absolute inset-0 bg-black/60 backdrop-blur-sm hidden flex-col items-center justify-center p-4 z-[101] opacity-0 transition-opacity duration-300">
-            <div class="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl border-4 border-blue-400 transform scale-90 transition-transform duration-300 text-center" id="minigame-char-box">
-                <i class="fas fa-gamepad text-5xl text-blue-500 mb-4 animate-bounce"></i>
-                <h3 class="text-xl font-bold text-gray-800 title-font mb-1">มินิเกมลับ!</h3>
-                <p class="text-sm text-gray-500 mb-4">เลือกตัวละครที่จะรับคะแนนหากชนะ</p>
-                
-                <div id="minigame-char-list" class="flex flex-col gap-2 max-h-48 overflow-y-auto no-scrollbar mb-4">
-                    <!-- สร้างปุ่มรายชื่อตัวละครจาก JS -->
-                </div>
-                
-                <button onclick="skipMiniGame()" class="text-sm text-gray-400 hover:text-gray-600 underline">ข้ามการเล่นเกม</button>
-            </div>
-        </div>
-
-        <!-- 2) Modal คำถาม Lucky Block -->
-        <div id="question-modal" class="absolute inset-0 bg-black/60 backdrop-blur-sm hidden flex-col items-center justify-center p-4 z-[100] opacity-0 transition-opacity duration-300">
-            <div class="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl border-4 border-yellow-400 transform scale-90 transition-transform duration-300" id="question-box">
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 bg-yellow-400 rounded-xl mx-auto flex items-center justify-center text-3xl mb-4 shadow-inner border-b-4 border-yellow-600">
-                        <i class="fas fa-question text-white"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800" id="question-text">คำถาม?</h3>
-                    <p class="text-sm text-gray-500 mt-1">ตอบถูกรับ 100 คะแนนทั่วไป!</p>
-                </div>
-                <div class="space-y-3" id="choice-container">
-                    <!-- สร้างช้อยส์จาก JS -->
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ================= END MINIGAME ================= -->
-
-    <!-- ดึงไฟล์ Script -->
-    <script src="minigame.js"></script>
+    <!-- ดึงไฟล์ Script หลัก -->
     <script src="script.js"></script>
 </body>
 </html>
